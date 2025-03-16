@@ -314,13 +314,13 @@ def index():
         <h2>Tinder-Style Simulation Parameters</h2>
         <form method="post">
           <details>
-            <summary>Param A (click to reveal)</summary>
+            <summary>Lever A (click to reveal)</summary>
             <label for="weight_reciprocal">Reciprocal Weight:</label>
             <input type="number" id="weight_reciprocal" name="weight_reciprocal" value="1.0" step="0.1" min="0" max="5.0">
           </details>
           
           <details>
-            <summary>Param B (click to reveal)</summary>
+            <summary>Lever B (click to reveal)</summary>
             <label for="weight_queue_penalty">Queue Penalty Weight:</label>
             <input type="number" id="weight_queue_penalty" name="weight_queue_penalty" value="0.5" step="0.1" min="0" max="2.0">
           </details>
