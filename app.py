@@ -84,8 +84,10 @@ def index():
           <b>=== Tinder-Style Simulation Results ===</b><br>
           <br>
           <b>Total Likes Sent:</b> {total_likes}<br>
+          <div style="margin-left:20px;">
           - Likes by men: {likes_by_men}<br>
-          - Likes by women: {likes_by_women}<br><br>
+          - Likes by women: {likes_by_women}
+          </div><br>
           <b>Total Unseen Likes Sent:</b> {total_unseen} ({unseen_percent:.2f}%)<br>
           <div style="margin-left:20px;">
           - Likes by men: {unseen_likes_men}<br>
