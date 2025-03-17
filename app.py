@@ -289,7 +289,7 @@ def index():
         <!DOCTYPE html>
         <html>
           <head>
-            <title>Tinder-Style Simulation Results (Combined Queue)</title>
+            <title>Tinder-Style Simulation Results</title>
             <style>
               body { font-family: Arial, sans-serif; margin: 40px; }
               .summary { margin-bottom: 30px; }
