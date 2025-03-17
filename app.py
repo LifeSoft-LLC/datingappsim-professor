@@ -79,16 +79,27 @@ def index():
 
         # Prepare summary HTML
         summary_html = f"""
-        <h2>Tinder-Style Simulation Results (Combined Queue)</h2>
-        <p><b>Days:</b> 3 (fixed) &nbsp;&nbsp;
-           <b>Daily Queue Size:</b> {daily_queue_size} (fixed)</p>
-        <p><b>Total Likes Sent:</b> {total_likes}
-           (Men: {likes_by_men}, Women: {likes_by_women})</p>
-        <p><b>Total Unseen Likes Sent:</b> {total_unseen} ({unseen_percent:.2f}%)
-           (Men: {unseen_likes_men}, Women: {unseen_likes_women}</p>
-        <p><b>Total Stale Unseen Likes Sent:</b> {total_stale} ({stale_percent:.2f}%)
-           (Men: {stale_likes_men}, Women: {stale_likes_women})</p>
-        <p><b>Unique Matches Created:</b> {unique_matches}</p>
+        <div style='font-size:14px; line-height:1.5;'>
+          <b>=<div style='font-size:14px; line-height:1.5;'>
+          <b>=== Tinder-Style Simulation Results ===</b><br>
+          <br>
+          <b>Total Likes Sent:</b> {total_likes}<br>
+          <div style="margin-left:20px;">
+          - Likes by men: {likes_by_men}<br>
+          - Likes by women: {likes_by_women}
+          </div><br>
+          <b>Total Unseen Likes Sent:</b> {total_unseen} ({unseen_percent:.2f}%)<br>
+          <div style="margin-left:20px;">
+          - Likes by men: {unseen_likes_men}<br>
+          - Likes by women: {unseen_likes_women}
+          </div><br>
+          <b>Total Stale Unseen Likes Sent:</b> {total_stale} ({stale_percent:.2f}%)<br>
+          <div style="margin-left:20px;">
+          - Likes by men: {stale_likes_men}<br>
+          - Likes by women: {stale_likes_women}
+          </div><br>
+          <b>Matches Created: <span style="color:purple; font-size:20px;">{unique_matches}</span></b>
+        </div>
         """
 
         # Generate plots
@@ -280,7 +291,7 @@ def index():
         <!DOCTYPE html>
         <html>
           <head>
-            <title>Tinder-Style Simulation Results (Combined Queue)</title>
+            <title>Tinder-Style Simulation Results</title>
             <style>
               body { font-family: Arial, sans-serif; margin: 40px; }
               .summary { margin-bottom: 30px; }
@@ -321,25 +332,15 @@ def index():
         <form method="post">
           <details>
             <summary>Lever A (click to reveal)</summary>
-            <label for="weight_reciprocal">Reciprocal Weight:</label>
-            <input type="number" id="weight_reciprocal" name="weight_reciprocal" value="1.0" step="0.1" min="0" max="5.0">
+            <label for="weight_reciprocal">Reciprocal Weight (w<sub>reciprocal</sub>):</label>
+            <input type="number" id="weight_reciprocal" name="weight_reciprocal" value="0.0" step="0.1" min="0" max="5.0">
           </details>
           
           <details>
             <summary>Lever B (click to reveal)</summary>
-            <label for="weight_queue_penalty">Queue Penalty Weight:</label>
-            <input type="number" id="weight_queue_penalty" name="weight_queue_penalty" value="0.5" step="0.1" min="0" max="2.0">
+            <label for="weight_queue_penalty">Queue Penalty Weight (w<sub>queue</sub>):</label>
+            <input type="number" id="weight_queue_penalty" name="weight_queue_penalty" value="0.0" step="0.1" min="0" max="2.0">
           </details>
-          
-          <label>
-            <input type="checkbox" name="export_trace" disabled>
-            Export Excel Trace?
-          </label>
-          
-          <label>
-            <input type="checkbox" name="export_jack_jill_trace" disabled>
-            Export Jack & Jill Trace?
-          </label>
           
           <label>
             <input type="checkbox" name="show_match_plots" checked>
