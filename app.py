@@ -80,7 +80,6 @@ def index():
         # Prepare summary HTML
         summary_html = f"""
         <div style='font-size:14px; line-height:1.5;'>
-          <b>=<div style='font-size:14px; line-height:1.5;'>
           <b>=== Tinder-Style Simulation Results ===</b><br>
           <br>
           <b>Total Likes Sent:</b> {total_likes}<br>
