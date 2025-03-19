@@ -84,30 +84,42 @@ def index():
         women_with_matches = sum(1 for uid in all_women_ids if len(matches[uid]) > 0)
 
         # Prepare summary HTML in two parts.
-        # Top summary (above graphs)
+        # Top summary (above graphs) with design matching our Tinder/Hinge redos.
         summary_top_html = f"""
         <div style='font-size:14px; line-height:1.5;'>
-          # of profile views: {profile_views_total}<br>
+          <b>=== Tinder-Style Simulation Results ===</b><br>
+          <br>
+          <b># of Profile Views:</b> {profile_views_total}<br>
+          <div style="margin-left:20px;">
           - By men: {profile_views_men}<br>
-          - By women: {profile_views_women}<br><br>
-          # of Likes Sent: {total_likes}<br>
+          - By women: {profile_views_women}
+          </div><br>
+          <b># of Likes Sent:</b> {total_likes}<br>
+          <div style="margin-left:20px;">
           - By men: {likes_by_men}<br>
-          - By women: {likes_by_women}<br><br>
-          # of Matches Created: {unique_matches}<br>
-          # of men who receive at least one match: {men_with_matches}<br>
-          # of women who receive at least one match: {women_with_matches}
+          - By women: {likes_by_women}
+          </div><br>
+          <b># of Matches Created:</b> <span style="color:purple; font-size:20px;">{unique_matches}</span><br>
+          <div style="margin-left:20px;">
+          - # of men who receive at least one match: {men_with_matches}<br>
+          - # of women who receive at least one match: {women_with_matches}
+          </div>
         </div>
         """
 
-        # Bottom summary (below graphs) for unseen metrics.
+        # Bottom summary (below graphs) for the unseen metrics.
         summary_bottom_html = f"""
         <div style='font-size:14px; line-height:1.5; margin-top:20px;'>
-          # of Unseen Likes Sent: {total_unseen} ({unseen_percent:.2f}% of likes sent)<br>
+          <b># of Unseen Likes Sent:</b> {total_unseen} ({unseen_percent:.2f}% of likes sent)<br>
+          <div style="margin-left:20px;">
           - By men: {unseen_likes_men}<br>
-          - By women: {unseen_likes_women}<br><br>
-          # of Stale Unseen Likes Sent: {total_stale} ({stale_percent:.2f}% of likes sent)<br>
+          - By women: {unseen_likes_women}
+          </div><br>
+          <b># of Stale Unseen Likes Sent:</b> {total_stale} ({stale_percent:.2f}% of likes sent)<br>
+          <div style="margin-left:20px;">
           - By men: {stale_likes_men}<br>
           - By women: {stale_likes_women}
+          </div>
         </div>
         """
 
@@ -195,7 +207,6 @@ def index():
             elif plot_type == "Histogram":
               # Fixed bin labels for histogram plots.
               bin_labels = ["0", "1-2", "3-4", "5+"]
-              # Function to compute histogram counts for fixed bins:
               def compute_hist_counts(data):
                   data = np.array(data)
                   bin0 = np.sum(data == 0)
@@ -204,7 +215,6 @@ def index():
                   bin3 = np.sum(data >= 5)
                   return [bin0, bin1, bin2, bin3]
               
-              # Compute histogram counts for matches and likes.
               men_match_data = [x[1] for x in men_matches]
               women_match_data = [x[1] for x in women_matches]
               men_match_hist = compute_hist_counts(men_match_data)
@@ -214,7 +224,6 @@ def index():
               men_likes_received_hist = compute_hist_counts(men_likes_received)
               women_likes_received_hist = compute_hist_counts(women_likes_received)
               
-              # Men's match histogram
               if show_match_plots:
                   axes[0,0].bar(range(len(men_match_hist)), men_match_hist,
                                 color="skyblue", edgecolor="black", width=0.8)
@@ -226,7 +235,6 @@ def index():
               else:
                   axes[0,0].axis('off')
               
-              # Women's match histogram
               if show_match_plots:
                   axes[0,1].bar(range(len(women_match_hist)), women_match_hist,
                                 color="lightpink", edgecolor="black", width=0.8)
@@ -238,7 +246,6 @@ def index():
               else:
                   axes[0,1].axis('off')
               
-              # Men's likes sent histogram
               if show_like_plots:
                   axes[1,0].bar(range(len(men_likes_hist)), men_likes_hist,
                                 color="skyblue", edgecolor="black", width=0.8)
@@ -250,7 +257,6 @@ def index():
               else:
                   axes[1,0].axis('off')
               
-              # Women's likes sent histogram
               if show_like_plots:
                   axes[1,1].bar(range(len(women_likes_hist)), women_likes_hist,
                                 color="lightpink", edgecolor="black", width=0.8)
@@ -262,7 +268,6 @@ def index():
               else:
                   axes[1,1].axis('off')
                   
-              # Men's likes received histogram
               if show_like_plots:
                   axes[2,0].bar(range(len(men_likes_received_hist)), men_likes_received_hist,
                                 color="skyblue", edgecolor="black", width=0.8)
@@ -274,7 +279,6 @@ def index():
               else:
                   axes[2,0].axis('off')
               
-              # Women's likes received histogram
               if show_like_plots:
                   axes[2,1].bar(range(len(women_likes_received_hist)), women_likes_received_hist,
                                 color="lightpink", edgecolor="black", width=0.8)
