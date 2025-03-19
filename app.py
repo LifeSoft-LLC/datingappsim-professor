@@ -73,31 +73,41 @@ def index():
                         stale_likes_women += 1
         total_stale = stale_likes_men + stale_likes_women
         
-        # Compute percentages for unseen and stale unseen likes (of total likes sent)
         unseen_percent = (total_unseen / total_likes * 100) if total_likes > 0 else 0
         stale_percent = (total_stale / total_likes * 100) if total_likes > 0 else 0
 
-        # Prepare summary HTML
-        summary_html = f"""
+        # ----- NEW METRICS: Profile views and counts of users with at least one match -----
+        profile_views_total = full_log.shape[0]
+        profile_views_men = full_log[full_log["UserID"].str.startswith("M")].shape[0]
+        profile_views_women = full_log[full_log["UserID"].str.startswith("W")].shape[0]
+        men_with_matches = sum(1 for uid in all_men_ids if len(matches[uid]) > 0)
+        women_with_matches = sum(1 for uid in all_women_ids if len(matches[uid]) > 0)
+
+        # Prepare summary HTML in two parts.
+        # Top summary (above graphs)
+        summary_top_html = f"""
         <div style='font-size:14px; line-height:1.5;'>
-          <b>=== Tinder-Style Simulation Results ===</b><br>
-          <br>
-          <b>Total Likes Sent:</b> {total_likes}<br>
-          <div style="margin-left:20px;">
-          - Likes by men: {likes_by_men}<br>
-          - Likes by women: {likes_by_women}
-          </div><br>
-          <b>Total Unseen Likes Sent:</b> {total_unseen} ({unseen_percent:.2f}%)<br>
-          <div style="margin-left:20px;">
-          - Likes by men: {unseen_likes_men}<br>
-          - Likes by women: {unseen_likes_women}
-          </div><br>
-          <b>Total Stale Unseen Likes Sent:</b> {total_stale} ({stale_percent:.2f}%)<br>
-          <div style="margin-left:20px;">
-          - Likes by men: {stale_likes_men}<br>
-          - Likes by women: {stale_likes_women}
-          </div><br>
-          <b>Matches Created: <span style="color:purple; font-size:20px;">{unique_matches}</span></b>
+          # of profile views: {profile_views_total}<br>
+          - By men: {profile_views_men}<br>
+          - By women: {profile_views_women}<br><br>
+          # of Likes Sent: {total_likes}<br>
+          - By men: {likes_by_men}<br>
+          - By women: {likes_by_women}<br><br>
+          # of Matches Created: {unique_matches}<br>
+          # of men who receive at least one match: {men_with_matches}<br>
+          # of women who receive at least one match: {women_with_matches}
+        </div>
+        """
+
+        # Bottom summary (below graphs) for unseen metrics.
+        summary_bottom_html = f"""
+        <div style='font-size:14px; line-height:1.5; margin-top:20px;'>
+          # of Unseen Likes Sent: {total_unseen} ({unseen_percent:.2f}% of likes sent)<br>
+          - By men: {unseen_likes_men}<br>
+          - By women: {unseen_likes_women}<br><br>
+          # of Stale Unseen Likes Sent: {total_stale} ({stale_percent:.2f}% of likes sent)<br>
+          - By men: {stale_likes_men}<br>
+          - By women: {stale_likes_women}
         </div>
         """
 
@@ -186,7 +196,6 @@ def index():
               # Fixed bin labels for histogram plots.
               bin_labels = ["0", "1-2", "3-4", "5+"]
               # Function to compute histogram counts for fixed bins:
-              # - Count exactly 0, counts between 1 and 2, between 3 and 4, and 5 or more.
               def compute_hist_counts(data):
                   data = np.array(data)
                   bin0 = np.sum(data == 0)
@@ -284,8 +293,7 @@ def index():
             buf.seek(0)
             plot_img = base64.b64encode(buf.getvalue()).decode("utf8")
             plt.close(fig)
-        # TODO: add full simulation trace exports as xlsx, when ready; use download prop
-        # Jack & Jill traces too
+        # NOTE: full simulation trace exports as xlsx and Jack & Jill traces remain TODO
         return render_template_string("""
         <!DOCTYPE html>
         <html>
@@ -298,20 +306,22 @@ def index():
           </head>
           <body>
             <div class="summary">
-              {{ summary_html|safe }}
+              {{ summary_top_html|safe }}
             </div>
             {% if plot_img %}
             <div>
-              <h3>Match Distribution Plots</h3>
               <img src="data:image/svg+xml;base64,{{ plot_img }}" alt="Plots">
             </div>
             {% endif %}
+            <div class="summary">
+              {{ summary_bottom_html|safe }}
+            </div>
             <div style="margin-top: 20px;">
               <a href="{{ url_for('index') }}">Run another simulation</a>
             </div>
           </body>
         </html>
-        """, summary_html=summary_html, plot_img=plot_img)
+        """, summary_top_html=summary_top_html, summary_bottom_html=summary_bottom_html, plot_img=plot_img)
 
     return render_template_string("""
     <!DOCTYPE html>
