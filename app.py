@@ -23,8 +23,8 @@ def index():
             daily_queue_size = int(request.form.get("daily_queue_size", 5))
             weight_reciprocal = float(request.form.get("weight_reciprocal", 1.0))
             weight_queue_penalty = float(request.form.get("weight_queue_penalty", 0.5))
-            export_trace = request.form.get("export_trace") == "on"
-            export_jack_jill_trace = request.form.get("export_jack_jill_trace") == "on"
+            export_trace = request.form.get("export_trace") == "off"
+            export_jack_jill_trace = request.form.get("export_jack_jill_trace") == "off"
             show_match_plots = request.form.get("show_match_plots") == "on"
             show_like_plots = request.form.get("show_like_plots") == "on"
             plot_type = request.form.get("plot_type", "Bar Chart")
@@ -206,13 +206,13 @@ def index():
 
             elif plot_type == "Histogram":
               # Fixed bin labels for histogram plots.
-              bin_labels = ["0", "1-2", "3-4", "5+"]
+              bin_labels = ["0", "1-3", "4-7", "8+"]
               def compute_hist_counts(data):
                   data = np.array(data)
                   bin0 = np.sum(data == 0)
-                  bin1 = np.sum((data >= 1) & (data <= 2))
-                  bin2 = np.sum((data >= 3) & (data <= 4))
-                  bin3 = np.sum(data >= 5)
+                  bin1 = np.sum((data >= 1) & (data <= 3))
+                  bin2 = np.sum((data >= 4) & (data <= 7))
+                  bin3 = np.sum(data >= 8)
                   return [bin0, bin1, bin2, bin3]
               
               men_match_data = [x[1] for x in men_matches]
@@ -346,13 +346,13 @@ def index():
           <details>
             <summary>Lever A (click to reveal)</summary>
             <label for="weight_reciprocal">Reciprocal Weight (w<sub>reciprocal</sub>):</label>
-            <input type="number" id="weight_reciprocal" name="weight_reciprocal" value="0.0" step="0.1" min="0" max="5.0">
+            <input type="number" id="weight_reciprocal" name="weight_reciprocal" value="0.0" step="0.1" min="0" max="3.0">
           </details>
           
           <details>
             <summary>Lever B (click to reveal)</summary>
             <label for="weight_queue_penalty">Queue Penalty Weight (w<sub>queue</sub>):</label>
-            <input type="number" id="weight_queue_penalty" name="weight_queue_penalty" value="0.0" step="0.1" min="0" max="2.0">
+            <input type="number" id="weight_queue_penalty" name="weight_queue_penalty" value="0.0" step="0.01" min="0" max="1.0">
           </details>
           
           <label>
